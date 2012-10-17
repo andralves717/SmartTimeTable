@@ -87,7 +87,7 @@ public class Parser {
             for (int i = 0; i < nl.getLength(); i++) {
                 org.w3c.dom.Element el = (org.w3c.dom.Element) nl.item(i);
 
-                String sub = Parser.getTextValue(el, "subject");
+                String sub = el.getAttribute("subject");
                 Componente comp = Componente.valueOf(Parser.getTextValue(el, "comp"));
                 String descr = Parser.getTextValue(el, "descr");
                 Boolean inc = Boolean.valueOf(Parser.getTextValue(el, "include"));

@@ -169,7 +169,6 @@ public class Turma implements Serializable, Conflictable<Turma>, Comparable<Turm
     public String toXML() {
         String out = "";
         
-        out += "\t\t<subject>" + cadeira + "</subject>\n";
         out += "\t\t<comp>" + comp.toString() + "</comp>\n";
         out += "\t\t<descr>" + turma + "</descr>\n";
         out += "\t\t<include>" + include + "</include>\n";

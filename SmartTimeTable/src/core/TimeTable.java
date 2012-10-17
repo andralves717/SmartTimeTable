@@ -349,6 +349,7 @@ public final class TimeTable implements Serializable {
      * @throws FileNotFoundException
      * @throws IOException
      */
+    @Deprecated
     public void save(File f) throws FileNotFoundException, IOException {
         ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream(f));
         out.writeObject(this);
@@ -365,6 +366,7 @@ public final class TimeTable implements Serializable {
      * @throws IOException
      * @throws ClassNotFoundException
      */
+    @Deprecated
     public static TimeTable load(File f) throws FileNotFoundException, IOException, ClassNotFoundException {
         TimeTable tt;
         ObjectInputStream in = new ObjectInputStream(new FileInputStream(f));
@@ -535,7 +537,7 @@ public final class TimeTable implements Serializable {
         }
         
         for(Turma t : horario) {
-            out += "\t<class>\n";
+            out += "\t<class subject=\"" + t.getCadeira() + "\">\n";
             out += t.toXML();
             out += "\t</class>\n";
         }
