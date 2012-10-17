@@ -35,7 +35,7 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
     private JPanel aulaButtons, cadeiraLabels, cadeiraFields, cadeiraButtons, lectureLabels, lectureFields, lectureButtons;
     private JMenuBar menu;
     private JMenu file, horario, options, help;
-    private JMenuItem novo, open, exportXML, importXML, save, saveAs, close, exit, construir, view, colors, overlap, about;
+    private JMenuItem novo, open, save, saveAs, close, exit, construir, view, colors, overlap, about;
     private JTextField cn, at, aih, aim, afh, afm;
     private JLabel cname, ac, acmp, atr, ads, ai, af, cad, aulas, lect;
     private JButton cadd, cremove, cedit, aadd, aremove, aedit, ladd, lremove, ledit;
@@ -116,8 +116,6 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         open.setFont(plain);
         save.setFont(plain);
         saveAs.setFont(plain);
-        importXML.setFont(plain);
-        exportXML.setFont(plain);
         close.setFont(plain);
         exit.setFont(plain);
         view.setFont(plain);
@@ -413,14 +411,6 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         saveAs = new JMenuItem("Save As", new ImageIcon(getClass().getResource("/icons/Save as.png")));
         saveAs.addActionListener(this);
         saveAs.setEnabled(false);
-        
-        importXML = new JMenuItem("Import as XML", new ImageIcon(getClass().getResource("/icons/Import.png")));
-        importXML.addActionListener(this);
-        importXML.setEnabled(true);
-        
-        exportXML = new JMenuItem("Export as XML", new ImageIcon(getClass().getResource("/icons/Export.png")));
-        exportXML.addActionListener(this);
-        exportXML.setEnabled(false);
 
         close = new JMenuItem("Close", new ImageIcon(getClass().getResource("/icons/Close file.png")));
         close.addActionListener(this);
@@ -436,9 +426,6 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         file.add(open);
         file.add(save);
         file.add(saveAs);
-        file.addSeparator();
-        file.add(importXML);
-        file.add(exportXML);
         file.addSeparator();
         file.add(close);
         file.add(exit);
@@ -518,7 +505,7 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         } else if (e.getSource() == save) {
             try {
                 if (saveFile != null) {
-                    tt.save(saveFile);
+                    Parser.exportXML(saveFile, tt);
 
                     if (this.hasChanged) {
                         this.hasChanged = false;
@@ -537,18 +524,6 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
             } catch (Exception e1) {
                 JOptionPane.showMessageDialog(null, "Error while trying to save the timetable!\n\n" + e1);
                 saveFile = null;
-            }
-        } else if (e.getSource() == importXML && checkChange()) {
-            try {
-                importDialog();
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(null, "Error while trying to save the timetable!\n\n" + e1);
-            }
-        } else if (e.getSource() == exportXML) {
-            try {
-                exportDialog();
-            } catch (Exception e1) {
-                JOptionPane.showMessageDialog(null, "Error while trying to save the timetable!\n\n" + e1);
             }
         } else if (e.getSource() == close && checkChange()) {
             closeHorario();
@@ -719,7 +694,6 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
     private void openHorario() {
         save.setEnabled(true);
         saveAs.setEnabled(true);
-        exportXML.setEnabled(true);
         close.setEnabled(true);
         construir.setEnabled(true);
         mainpanel.setEnabled(true);
@@ -749,7 +723,6 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         saveFile = null;
         save.setEnabled(false);
         saveAs.setEnabled(false);
-        exportXML.setEnabled(false);
         close.setEnabled(false);
         construir.setEnabled(false);
         mainpanel.setEnabled(false);
@@ -787,7 +760,7 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         fc.setDialogTitle("Save Timetable");
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileNameExtensionFilter filterstt = new FileNameExtensionFilter(
-                "SmartTimeTable file (.sttv2)", "sttv2");
+                "SmartTimeTable XML file (.sttx)", "sttx");
         fc.addChoosableFileFilter(filterstt);
         fc.setFileFilter(filterstt);
         fc.setAcceptAllFileFilterUsed(false);
@@ -795,9 +768,9 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         if (fc.showDialog(null, "Save") == JFileChooser.APPROVE_OPTION) {
             saveFile = fc.getSelectedFile();
             if (!filterstt.accept(saveFile)) {
-                saveFile = new File(saveFile.getCanonicalPath() + ".sttv2");
+                saveFile = new File(saveFile.getCanonicalPath() + ".sttx");
             }
-            tt.save(saveFile);
+            Parser.exportXML(saveFile, tt);
             this.setTitle("SmartTimeTable - " + saveFile.getAbsolutePath());
             hasChanged = false;
             return true;
@@ -806,69 +779,23 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         return false;
     }
 
-    private void loadDialog() throws FileNotFoundException, IOException, ClassNotFoundException {
+    private void loadDialog() throws ParserConfigurationException, SAXException, IOException {
         JFileChooser fc = new JFileChooser();
         fc.setCurrentDirectory(new File("."));
         fc.setDialogTitle("Open Timetable");
         fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
         FileNameExtensionFilter filterstt = new FileNameExtensionFilter(
-                "SmartTimeTable file (.sttv2)", "sttv2");
+                "SmartTimeTable XML file (.sttx)", "sttx");
         fc.addChoosableFileFilter(filterstt);
         fc.setFileFilter(filterstt);
         fc.setAcceptAllFileFilterUsed(false);
 
         if (fc.showDialog(null, "Open") == JFileChooser.APPROVE_OPTION) {
             saveFile = fc.getSelectedFile();
-            tt = TimeTable.load(saveFile);
+            tt = Parser.importXML(saveFile);
             this.setTitle("SmartTimeTable - " + saveFile.getAbsolutePath());
             openHorario();
             hasChanged = false;
-        }
-    }
-
-    private boolean exportDialog() throws FileNotFoundException, IOException {
-        File export;
-        JFileChooser fc = new JFileChooser();
-        fc.setCurrentDirectory(new File("."));
-        fc.setDialogTitle("Export Timetable");
-        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        FileNameExtensionFilter filterstt = new FileNameExtensionFilter(
-                "Extensible Markup Language file (.xml)", "xml");
-        fc.addChoosableFileFilter(filterstt);
-        fc.setFileFilter(filterstt);
-        fc.setAcceptAllFileFilterUsed(false);
-
-        if (fc.showDialog(null, "Export") == JFileChooser.APPROVE_OPTION) {
-            export = fc.getSelectedFile();
-            if (!filterstt.accept(export)) {
-                export = new File(export.getCanonicalPath() + ".xml");
-            }
-            Parser.exportXML(export, tt);
-            return true;
-        }
-
-        return false;
-    }
-    
-    private void importDialog() throws FileNotFoundException, IOException, ClassNotFoundException, ParserConfigurationException, SAXException {
-        File fimport;
-        JFileChooser fc = new JFileChooser();
-        fc.setCurrentDirectory(new File("."));
-        fc.setDialogTitle("Import Timetable");
-        fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
-        FileNameExtensionFilter filterstt = new FileNameExtensionFilter(
-                "Extensible Markup Language file (.xml)", "xml");
-        fc.addChoosableFileFilter(filterstt);
-        fc.setFileFilter(filterstt);
-        fc.setAcceptAllFileFilterUsed(false);
-
-        if (fc.showDialog(null, "Import") == JFileChooser.APPROVE_OPTION) {
-            fimport = fc.getSelectedFile();
-            tt = Parser.importXML(fimport);
-            saveFile = null;
-            this.setTitle("SmartTimeTable*");
-            openHorario();
-            hasChanged = true;
         }
     }
 
