@@ -144,6 +144,17 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
                 }
             }
         };
+        
+        FocusAdapter fa = new FocusAdapter() {
+            @Override
+            public void focusGained(FocusEvent e) {
+                if (e.getSource() == aim || e.getSource() == afm) {
+                    ((JTextField) e.getSource()).setText("0");
+                } else {
+                    ((JTextField) e.getSource()).setText("");
+                }
+            }
+        };
 
         ListCellRenderer renderer = new DefaultListCellRenderer();
         ((JLabel) renderer).setHorizontalAlignment(SwingConstants.CENTER);
@@ -169,6 +180,7 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         cn = new JTextField("Subject Name Goes Here");
         cn.setHorizontalAlignment(JTextField.CENTER);
         cn.addMouseListener(ma);
+        cn.addFocusListener(fa);
 
         cn.setEditable(false);
 
@@ -245,7 +257,8 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         at = new JTextField("Class");
         at.setHorizontalAlignment(JTextField.CENTER);
         at.addMouseListener(ma);
-
+        at.addFocusListener(fa);
+        
         acad.setEnabled(false);
         acomp.setEnabled(false);
         at.setEditable(false);
@@ -331,15 +344,19 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         aih = new JTextField("Hours");
         aih.setHorizontalAlignment(JTextField.CENTER);
         aih.addMouseListener(ma);
+        aih.addFocusListener(fa);
         aim = new JTextField("Minutes");
         aim.setHorizontalAlignment(JTextField.CENTER);
         aim.addMouseListener(ma);
+        aim.addFocusListener(fa);
         afh = new JTextField("Hours");
         afh.setHorizontalAlignment(JTextField.CENTER);
         afh.addMouseListener(ma);
+        afh.addFocusListener(fa);
         afm = new JTextField("Minutes");
         afm.setHorizontalAlignment(JTextField.CENTER);
         afm.addMouseListener(ma);
+        afm.addFocusListener(fa);
 
         adia.setEnabled(false);
         aih.setEditable(false);
