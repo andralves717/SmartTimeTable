@@ -935,7 +935,7 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
             if (opt == JOptionPane.YES_OPTION) {
                 try {
                     if (saveFile != null) {
-                        tt.save(saveFile);
+                        Parser.exportXML(saveFile, tt);
                     } else if (!saveDialog()) {
                         return false;
                     }
