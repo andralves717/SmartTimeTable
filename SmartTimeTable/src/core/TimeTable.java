@@ -423,7 +423,7 @@ public final class TimeTable implements Serializable {
     }
 
     public boolean renameCadeira(String oldName, String newName) {
-        if (!cadeiras.contains(newName)) {
+        if (cadeiras.contains(oldName)) {
             cadeiras.remove(oldName);
             cadeiras.add(newName);
 
@@ -440,10 +440,12 @@ public final class TimeTable implements Serializable {
     }
 
     public boolean changeTurma(Turma ot, Turma nt) {
-        if (!horario.contains(nt)) {
+        if (horario.contains(ot)) {
+            removeTurma(ot);
             ot.setCadeira(nt.getCadeira());
             ot.setComp(nt.getComponente());
             ot.setTurma(nt.getTurma());
+            addTurma(ot);
         } else {
             return false;
         }
