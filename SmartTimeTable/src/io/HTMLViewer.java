@@ -176,6 +176,7 @@ public class HTMLViewer extends JFrame implements ActionListener {
         next.setEnabled(true);
         last.setEnabled(true);
         delete.setEnabled(true);
+        print.setEnabled(true);
 
         if (currentTT == 0) {
             first.setEnabled(false);
@@ -193,6 +194,7 @@ public class HTMLViewer extends JFrame implements ActionListener {
             next.setEnabled(false);
             last.setEnabled(false);
             delete.setEnabled(false);
+            print.setEnabled(false);
         }
     }
 
@@ -257,6 +259,7 @@ public class HTMLViewer extends JFrame implements ActionListener {
                 editorPane.setText("<h1>Error while trying to read the timetable<h1>");
             }
         } else {
+            listArea.setText("");
             editorPane.setText("<h1>No timetables were found inside the folder \"TimeTables\"<h1>");
         }
     }
