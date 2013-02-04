@@ -252,6 +252,7 @@ public class HTMLViewer extends JFrame implements ActionListener {
                 }
                 
                 editorPane.setText(readFile(list[currentTT]));
+                in.close();
             } catch (Exception ex) {
                 editorPane.setText("<h1>Error while trying to read the timetable<h1>");
             }
