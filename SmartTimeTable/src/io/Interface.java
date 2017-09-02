@@ -144,7 +144,7 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
                 }
             }
         };
-        
+
         FocusAdapter fa = new FocusAdapter() {
             @Override
             public void focusGained(FocusEvent e) {
@@ -258,7 +258,7 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
         at.setHorizontalAlignment(JTextField.CENTER);
         at.addMouseListener(ma);
         at.addFocusListener(fa);
-        
+
         acad.setEnabled(false);
         acomp.setEnabled(false);
         at.setEditable(false);
@@ -572,6 +572,11 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
             JOptionPane.showMessageDialog(null, "Created By: Diogo Regateiro\nEmail: diogo.regateiro@gmail.com\nVersion: 4.4\n\nPlease report bugs to the email above. Thank you for using this program! :)");
         } else if (e.getSource() == cadd) {
             try {
+                if (cn.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Error! The subject name field cannot de empty!");
+                    return;
+                }
+
                 tt.addCadeira(cn.getText());
 
                 refreshLists(true);
@@ -609,6 +614,11 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
             }
         } else if (e.getSource() == aadd) {
             try {
+                if (at.getText().equals("")) {
+                    JOptionPane.showMessageDialog(null, "Error! The class field cannot de empty!");
+                    return;
+                }
+
                 tt.addTurma(new Turma((String) acad.getSelectedItem(), (Componente) acomp.getSelectedItem(), at.getText()));
 
                 refreshLists(false);
@@ -733,7 +743,8 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
     }
 
     private void closeHorario() {
-        tt = null; /*
+        tt = null;
+        /*
          * Disable Menus
          */
 
