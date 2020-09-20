@@ -569,7 +569,7 @@ public class Interface extends JFrame implements ActionListener, ListSelectionLi
                 JOptionPane.showMessageDialog(null, "Error while trying to make the timetables!\n\n" + e1);
             }
         } else if (e.getSource() == about) {
-            JOptionPane.showMessageDialog(null, "Created By: Diogo Regateiro\nEmail: diogo.regateiro@gmail.com\nVersion: 4.5\n\nPlease report bugs to the email above. Thank you for using this program! :)");
+            JOptionPane.showMessageDialog(null, "Created By: Diogo Regateiro\nForked and Updated by: André Alves\nEmail: andr.alves@ua.pt\nVersion: 4.6\n\nPlease report bugs to the email above. Thank you for using this program! :)");
         } else if (e.getSource() == cadd) {
             try {
                 if (cn.getText().equals("")) {
