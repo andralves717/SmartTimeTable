@@ -11,6 +11,9 @@ import java.util.logging.Logger;
  *
  * @author Diogo Regateiro
  *
+ * @author andralves
+ * @version 4.6
+ *
  */
 public final class TimeTable implements Serializable {
 
@@ -234,9 +237,9 @@ public final class TimeTable implements Serializable {
      */
     private void saveValidHorario(Turma[] buffer) throws FileNotFoundException, IOException {
         PrintWriter pw = new PrintWriter(dir.getAbsolutePath() + File.separator + fileID++ + ".txt");
-        pw.write("|-------|----------|----------|----------|----------|----------|\n");
-        pw.write("| HORAS | SEGUNDA  |  TERCA   |  QUARTA  |  QUINTA  |  SEXTA   |\n");
-        pw.write("|-------|----------|----------|----------|----------|----------|\n");
+        pw.write("|-------|----------|----------|----------|----------|----------|----------|\n");
+        pw.write("| HORAS | SEGUNDA  |  TERCA   |  QUARTA  |  QUINTA  |  SEXTA   |  SÁBADO  |\n");
+        pw.write("|-------|----------|----------|----------|----------|----------|----------|\n");
 
         for (Hora h = new Hora(8, 0); h.compareTo(new Hora(22, 0)) < 0; h = new Hora(h.getTotalTimeInMins() + 30)) {
             pw.printf("| %5s |", h);
@@ -259,7 +262,7 @@ public final class TimeTable implements Serializable {
                 }
             }
 
-            pw.write("\n|-------|----------|----------|----------|----------|----------|\n");
+            pw.write("\n|-------|----------|----------|----------|----------|----------|----------|\n");
         }
 
         pw.flush();
@@ -300,14 +303,15 @@ public final class TimeTable implements Serializable {
         pw.write("<th style=\"background-color:gray;\">Tuesday</th>\n");
         pw.write("<th style=\"background-color:gray;\">Wednesday</th>\n");
         pw.write("<th style=\"background-color:gray;\">Thursday</th>\n");
-        pw.write("<th style=\"background-color:gray;\">Friday</th>\n\t\t\t</tr>\n");
+        pw.write("<th style=\"background-color:gray;\">Friday</th>\n");
+        pw.write("<th style=\"background-color:gray;\">Saturday</th>\n\t\t\t</tr>\n");
 
         //Construct the rest of the table
         for (Hora h = new Hora(8, 0); h.compareTo(new Hora(22, 0)) < 0; h = new Hora(h.getTotalTimeInMins() + 30)) {
             pw.write("<tr>\n");
             pw.printf("<td style=\"background-color:gray;\">%s</td>\n", h);
 
-            for (int i = 0; i < 5; i++) {
+            for (int i = 0; i < 6; i++) {
                 boolean found = false;
 
                 pw.write("<td><table width=\"100%\" border=\"0\" cellspacing=\"0\" cellpadding=\"0\"><tr>");
