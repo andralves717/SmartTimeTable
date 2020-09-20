@@ -74,7 +74,7 @@ public final class TimeTable implements Serializable {
     /**
      * Checks if a given class does not conflict with others enabled.
      *
-     * @param a A class to check if fits
+     * @param t A class to check if fits
      * @return true if the class fits, false otherwise
      */
     private boolean turmaFits(Turma t) {
@@ -277,7 +277,13 @@ public final class TimeTable implements Serializable {
      * @throws IOException
      */
     private void saveValidHorarioAsHTML(Turma[] buffer) throws FileNotFoundException, IOException {
-        PrintWriter pw = new PrintWriter(dir.getAbsolutePath() + File.separator + fileID + ".html");
+        PrintWriter pw;
+        if(fileID < 10)
+            pw = new PrintWriter(dir.getAbsolutePath() + File.separator + "00" + fileID + ".html");
+        else if(fileID < 100)
+            pw = new PrintWriter(dir.getAbsolutePath() + File.separator + "0" + fileID + ".html");
+        else
+            pw = new PrintWriter(dir.getAbsolutePath() + File.separator + fileID + ".html");
         pw.write("<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.01 Transitional//EN\n");
         pw.write("\"http://www.w3.org/TR/html4/loose.dtd\">\n");
         pw.write("<html lang=\"en\">\n");
